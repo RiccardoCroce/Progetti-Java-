@@ -15,6 +15,7 @@ public class Tris {
     private String Giocatore = GiocatoreX;
     private boolean FineGioco = false;
     
+    Tris tris;
     //Implementazioni
     JFrame Finestra = new JFrame("Tris Con Interfaccia Grafica(Con Bottoni inclusi)");
     JLabel Testo = new JLabel();
@@ -74,14 +75,14 @@ public class Tris {
                        if (FineGioco) 
                            return;
                        JButton cella = (JButton) e.getSource();
-                       if (cella.getText() == ""){
+                       if (cella.getText().equals("")){
                            cella.setText(Giocatore);
                            turni++;
-                           ControlloPartita();
+                           ControlloGriglia();
                            if (!FineGioco){
                                Giocatore = Giocatore == GiocatoreX ? GiocatoreO : GiocatoreX; 
                                 /*Si può anche scrivere
-                                if (Giocatore == GiocatoreX){
+                                if (Giocatore.equals(GiocatoreX)){
                                     Giocatore = GiocatoreO;
                                 }else{
                                     Giocatore = GiocatoreX
@@ -92,12 +93,94 @@ public class Tris {
                        }     
                    }
                
-               });
+               }); 
+            }
+        }
+        Reset.setBackground(Color.black);
+        Reset.setForeground(Color.white);
+        Reset.setFont(new Font("Arial", Font.BOLD, 20));
+        Reset.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (e.getSource()==Reset){
+                    
+                }
+            }
+        });
+        
+    }
+    private void ControlloGriglia(){
+        //Vittoria Verticale 
+        for (int i = 0; i < 3; i++) {
+            if (GrigliaBottoni[0][i].getText().equals("")) continue; //bisogna continuare sennò il codice non funziona
+            
+            if (GrigliaBottoni[0][i].getText().equals(GrigliaBottoni[1][i].getText())&&
+                GrigliaBottoni[1][i].getText().equals(GrigliaBottoni[2][i].getText())){
+                for (int j = 0; j < 3; j++) {
+                    setVincitore(GrigliaBottoni[j][i]);
+                }
+                FineGioco = true;
+                return; //Senza il return succede che quando turni(variabile) arriva a 9 e c'è una vittoria non la conta e dice pareggio 
             }
         }
         
-    }
-    private void ControlloPartita(){
+        //Vittoria Orizzontale
+        for (int i = 0; i < 3; i++) {
+            if (GrigliaBottoni[i][0].getText().equals("")) continue; //bisogna continuare sennò il codice non funziona
+            
+            if (GrigliaBottoni[i][0].getText().equals(GrigliaBottoni[i][1].getText())&&
+                GrigliaBottoni[i][1].getText().equals(GrigliaBottoni[i][2].getText())){
+                for (int j = 0; j < 3; j++) {
+                    setVincitore(GrigliaBottoni[j][i]);
+                }
+                FineGioco = true;
+                return; //Senza il return succede che quando turni(variabile) arriva a 9 e c'è una vittoria non la conta e dice pareggio 
+            }
+        }
         
+        //Vittoria Diagonale Destro
+        if (GrigliaBottoni[0][0].getText().equals(GrigliaBottoni[1][1].getText())&&
+            GrigliaBottoni[1][1].getText().equals(GrigliaBottoni[2][2].getText())&&
+            GrigliaBottoni[0][0].getText()!=""){
+            for (int j = 0; j < 3; j++) {
+                setVincitore(GrigliaBottoni[j][j]);
+            }
+            FineGioco = true;
+            return; //Senza il return succede che quando turni(variabile) arriva a 9 e c'è una vittoria non la conta e dice pareggio 
+            }
+        
+        
+        //Vittoria Diagonale Sinistro
+        if (GrigliaBottoni[0][2].getText().equals(GrigliaBottoni[1][1].getText())&&
+            GrigliaBottoni[1][1].getText().equals(GrigliaBottoni[2][0].getText())&&
+            GrigliaBottoni[0][2].getText() != ""){
+            setVincitore(GrigliaBottoni[0][2]);
+            setVincitore(GrigliaBottoni[1][1]);
+            setVincitore(GrigliaBottoni[2][0]);
+            FineGioco = true;
+            return; //Senza il return succede che quando turni(variabile) arriva a 9 e c'è una vittoria non la conta e dice pareggio 
+            }
+        
+        //Pareggio
+        if (turni == 9){
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    setPareggio(GrigliaBottoni[i][j]);
+                }
+            }
+            FineGioco = true;
+        }
+    }
+    
+    private void setVincitore(JButton Cella){
+       Cella.setForeground(Color.cyan);
+       Cella.setBackground(Color.gray);
+       Testo.setText("Il vincitore e': "+Giocatore);
+    }
+    
+    private void setPareggio(JButton Cella){
+        Cella.setBackground(Color.red);
+        Cella.setForeground(Color.gray);
+        Testo.setBackground(Color.red);
+        Testo.setText("Pareggio");
     }
 }
