@@ -13,6 +13,7 @@ public class GiocoReset extends JFrame implements ActionListener{
     public GiocoReset(){
         this.setVisible(true);
         this.setSize(x, y);
+        this.setTitle("Premi il tasto per 500€");
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setLayout(null);  //ti toglie il layout predefinito di java
@@ -22,7 +23,7 @@ public class GiocoReset extends JFrame implements ActionListener{
         
         BottoneReset = new JButton("Reset");
         BottoneReset.setSize(100, 50);
-        BottoneReset.setLocation(10, 325);
+        BottoneReset.setLocation(350, 350);
         BottoneReset.addActionListener(this);
         
         this.add(BottoneReset);

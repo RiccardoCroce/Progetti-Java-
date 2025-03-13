@@ -6,8 +6,8 @@ import javax.swing.*;
 
 public class CodiceGiocoReset extends JPanel{
     private int r, g, b;
-    private int x = 700;
-    private int y = 700;
+    private int x = 800;
+    private int y = 800;
     Random random; 
     
     public CodiceGiocoReset(){
@@ -18,7 +18,6 @@ public class CodiceGiocoReset extends JPanel{
         b = random.nextInt(256);
         
         this.setSize(x, y);
-        this.setLocation(110, 25);
         this.setBackground(new Color(r,g,b));
     }
 }
