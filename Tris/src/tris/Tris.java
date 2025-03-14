@@ -55,6 +55,7 @@ public class Tris {
         PannelloAggiuntivo.add(Reset);
         Finestra.add(PannelloAggiuntivo, BorderLayout.AFTER_LAST_LINE);
         initGriglia();
+        reset();
     }
     
     //Creo Griglia da giocare
@@ -94,7 +95,13 @@ public class Tris {
                    }
                
                }); 
-               Reset.setBackground(Color.black);
+               
+            }
+        }
+    }
+    
+    private void reset(){
+        Reset.setBackground(Color.black);
                 Reset.setForeground(Color.white);
                 Reset.setFont(new Font("Arial", Font.BOLD, 20));
              Reset.addActionListener(new ActionListener(){
@@ -103,6 +110,8 @@ public class Tris {
                     Finestra.remove(PannelloGriglia);
                     PannelloGriglia = new JPanel();
                     turni = 0;
+                    int PuntiX = 0;
+                    int PuntiY = 0;
                     FineGioco = false;
                     Giocatore = GiocatoreO;
                     PannelloGriglia.setLayout(new GridLayout(3, 3));
@@ -113,8 +122,6 @@ public class Tris {
                 }
             }
         });
-            }
-        }
     }
     
     private void ControlloGriglia(){
