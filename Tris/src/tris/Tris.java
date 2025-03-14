@@ -94,20 +94,29 @@ public class Tris {
                    }
                
                }); 
-            }
-        }
-        Reset.setBackground(Color.black);
-        Reset.setForeground(Color.white);
-        Reset.setFont(new Font("Arial", Font.BOLD, 20));
-        Reset.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                if (e.getSource()==Reset){
-                    
+               Reset.setBackground(Color.black);
+                Reset.setForeground(Color.white);
+                Reset.setFont(new Font("Arial", Font.BOLD, 20));
+             Reset.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent f){
+                if (f.getSource()==Reset){
+                    Finestra.remove(PannelloGriglia);
+                    PannelloGriglia = new JPanel();
+                    turni = 0;
+                    FineGioco = false;
+                    Giocatore = GiocatoreO;
+                    PannelloGriglia.setLayout(new GridLayout(3, 3));
+                    PannelloGriglia.setBackground(Color.gray);
+                    Finestra.add(PannelloGriglia);
+                    initGriglia();
+                    SwingUtilities.updateComponentTreeUI(Finestra);
                 }
             }
         });
-        
+            }
+        }
     }
+    
     private void ControlloGriglia(){
         //Vittoria Verticale 
         for (int i = 0; i < 3; i++) {
@@ -172,7 +181,7 @@ public class Tris {
     }
     
     private void setVincitore(JButton Cella){
-       Cella.setForeground(Color.cyan);
+       Cella.setForeground(Color.red);
        Cella.setBackground(Color.gray);
        Testo.setText("Il vincitore e': "+Giocatore);
     }
@@ -180,7 +189,6 @@ public class Tris {
     private void setPareggio(JButton Cella){
         Cella.setBackground(Color.red);
         Cella.setForeground(Color.gray);
-        Testo.setBackground(Color.red);
         Testo.setText("Pareggio");
     }
 }
