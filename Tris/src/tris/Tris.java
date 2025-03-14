@@ -2,6 +2,7 @@ package tris;
 
 import java.awt.*; //Label e Panel
 import java.awt.event.*;  //ActionListener
+import java.util.Random;
 import javax.swing.*;
 
 public class Tris {
@@ -10,12 +11,17 @@ public class Tris {
     private int lunghezza = 850;
     private int dimensione = 3;
     private int turni = 0;
+    private int PuntiX = 0;
+    private int PuntiO = 0;
+    private int Pareggio = 0;
+    private int r,g,b; 
     private String GiocatoreX = "X";
     private String GiocatoreO = "O";
     private String Giocatore = GiocatoreX;
     private boolean FineGioco = false;
+    private boolean Vittoria = false;
     
-    Tris tris;
+    
     //Implementazioni
     JFrame Finestra = new JFrame("Tris Con Interfaccia Grafica(Con Bottoni inclusi)");
     JLabel Testo = new JLabel();
@@ -26,6 +32,7 @@ public class Tris {
     JButton[][] GrigliaBottoni = new JButton[dimensione][dimensione];
     JButton Reset = new JButton("Reset");
     
+    Random random;
     //Costruttore
     public Tris(){
         Finestra.setVisible(true);
@@ -50,12 +57,16 @@ public class Tris {
         Finestra.add(PannelloGriglia);
         
         PannelloAggiuntivo.setLayout(new BorderLayout());
-        Reset.setPreferredSize(new Dimension(0, 40));
         PannelloAggiuntivo.setBackground(Color.red);
         PannelloAggiuntivo.add(Reset);
         Finestra.add(PannelloAggiuntivo, BorderLayout.AFTER_LAST_LINE);
         initGriglia();
         reset();
+        
+        random = new Random();
+        r = random.nextInt(256);
+        g = random.nextInt(256);
+        b = random.nextInt(256);
     }
     
     //Creo Griglia da giocare
@@ -102,23 +113,38 @@ public class Tris {
     
     private void reset(){
         Reset.setBackground(Color.black);
-                Reset.setForeground(Color.white);
-                Reset.setFont(new Font("Arial", Font.BOLD, 20));
-             Reset.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent f){
-                if (f.getSource()==Reset){
-                    Finestra.remove(PannelloGriglia);
-                    PannelloGriglia = new JPanel();
-                    turni = 0;
-                    int PuntiX = 0;
-                    int PuntiY = 0;
-                    FineGioco = false;
+        Reset.setForeground(Color.white);
+        Reset.setFont(new Font("Arial", Font.BOLD, 20));
+        Reset.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent f){
+            if (f.getSource()==Reset){
+                Finestra.remove(PannelloGriglia);
+                PannelloGriglia = new JPanel();
+                if(Vittoria == true && turni==9){
+                    turni++;  
+                }
+                if (Giocatore.equals(GiocatoreX)&&FineGioco==true&&turni!=9){
                     Giocatore = GiocatoreO;
-                    PannelloGriglia.setLayout(new GridLayout(3, 3));
-                    PannelloGriglia.setBackground(Color.gray);
-                    Finestra.add(PannelloGriglia);
-                    initGriglia();
-                    SwingUtilities.updateComponentTreeUI(Finestra);
+                    PuntiX++;
+                    turni = 0;
+                }else if (Giocatore.equals(GiocatoreO)&&FineGioco==true&&turni!=9){
+                    Giocatore = GiocatoreX;
+                    PuntiO++;
+                    turni = 0;
+                }else{
+                    Pareggio++;
+                }
+                turni = 0;
+                Vittoria = false;
+                FineGioco = false;
+                Testo.setText("Tocca a te: "+Giocatore);
+                PannelloGriglia.setLayout(new GridLayout(3, 3));
+                PannelloGriglia.setBackground(Color.gray);
+                Finestra.add(PannelloGriglia);
+                initGriglia();
+                SwingUtilities.updateComponentTreeUI(Finestra);
+                System.out.println("Punti di X: " + PuntiX+ "\nPunti di O: " + PuntiO+ "\nPareggi: " + Pareggio);
+                System.out.println();
                 }
             }
         });
@@ -145,9 +171,9 @@ public class Tris {
             
             if (GrigliaBottoni[i][0].getText().equals(GrigliaBottoni[i][1].getText())&&
                 GrigliaBottoni[i][1].getText().equals(GrigliaBottoni[i][2].getText())){
-                for (int j = 0; j < 3; j++) {
-                    setVincitore(GrigliaBottoni[j][i]);
-                }
+                setVincitore(GrigliaBottoni[i][0]);
+                setVincitore(GrigliaBottoni[i][1]);
+                setVincitore(GrigliaBottoni[i][2]);
                 FineGioco = true;
                 return; //Senza il return succede che quando turni(variabile) arriva a 9 e c'è una vittoria non la conta e dice pareggio 
             }
@@ -188,13 +214,14 @@ public class Tris {
     }
     
     private void setVincitore(JButton Cella){
-       Cella.setForeground(Color.red);
+       Cella.setForeground(new Color(r,g,b));
        Cella.setBackground(Color.gray);
+       Vittoria = true;
        Testo.setText("Il vincitore e': "+Giocatore);
     }
     
     private void setPareggio(JButton Cella){
-        Cella.setBackground(Color.red);
+        Cella.setForeground(new Color(r,g,b));
         Cella.setForeground(Color.gray);
         Testo.setText("Pareggio");
     }
